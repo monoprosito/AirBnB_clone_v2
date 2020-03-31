@@ -21,18 +21,20 @@ class FileStorage:
     __objects = {}
 
     def all(self, cls=None):
-        """returns a dictionary
-        Return:
-            returns a dictionary of __object
+        """Returns all the objects
+
+        If a class is specified, the method only
+        returns the objects of same type.
+
         """
 
         if cls:
             same_type = dict()
 
-            for key in self.__objects.keys():
-                if key.startswith(cls.__name__):
-                    cls_id = key.split(".")[1]
-                    same_type[cls_id] = self.__objects[key]
+            for key, obj in self.__objects.items():
+                if obj.__class__ == cls:
+                    _id = key.split(".")[1]
+                    same_type[_id] = obj
 
             return same_type
 
