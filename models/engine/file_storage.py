@@ -33,8 +33,7 @@ class FileStorage:
 
             for key, obj in self.__objects.items():
                 if obj.__class__ == cls:
-                    _id = key.split(".")[1]
-                    same_type[_id] = obj
+                    same_type[key] = obj
 
             return same_type
 
