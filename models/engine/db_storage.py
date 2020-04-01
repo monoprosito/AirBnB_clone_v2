@@ -13,6 +13,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 
 all_classes = {"State", "City"}
 
+
 class DBStorage:
     """...
 
@@ -24,7 +25,6 @@ class DBStorage:
 
     __engine = None
     __session = None
-
 
     def __init__(self):
         """Initialize a connection with MySQL
@@ -58,8 +58,8 @@ class DBStorage:
     def new(self, obj):
         """Add obj to the current database session.
         """
-
-        self.__session.add(obj)
+        if obj:
+            self.__session.add(obj)
 
     def save(self):
         """Commit all changes to the current database session.
@@ -80,7 +80,8 @@ class DBStorage:
         """
 
         Base.metadata.create_all(self.__engine)
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
 
@@ -92,13 +93,9 @@ class DBStorage:
             query = self.__session.query(cls)
 
             for _row in query.all():
-                key = "{}.{}".format(type(cls).__name__, _row.id)
+                key = "{}.{}".format(cls.__name__, _row.id)
                 structure[key] = _row
 
             self.__session.close()
 
             return structure
-
-
-
-
