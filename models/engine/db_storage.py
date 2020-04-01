@@ -9,16 +9,16 @@ from models.place import Place
 from models.review import Review
 from os import getenv
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 
-all_classes = {"BaseModel", "User", "State", "City",
-                   "Amenity", "Place", "Review"}
+all_classes = {"State", "City"}
 
 class DBStorage:
-    """..
+    """...
 
     Attributes:
-        ...
+        __engine: The SQLAlchemy engine
+        __session: The SQLAlchemy session
 
     """
 
@@ -27,7 +27,8 @@ class DBStorage:
 
 
     def __init__(self):
-        """...
+        """Initialize a connection with MySQL
+        and create tables
         """
 
         db_uri = "{0}+{1}://{2}:{3}@{4}:3306/{5}".format(
@@ -36,11 +37,7 @@ class DBStorage:
             getenv('HBNB_MYSQL_DB'))
 
         self.__engine = create_engine(db_uri, pool_pre_ping=True)
-
-        Base.metadata.create_all(self.__engine)
-        Session = sessionmaker(bind=self.__engine)
-
-        self.__session = Session()
+        self.reload()
 
         if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
@@ -88,10 +85,10 @@ class DBStorage:
         self.__session = Session()
 
     def get_data_from_table(self, cls, structure):
-        """...
+        """Get the data from a MySQL Table
         """
 
-        if structure is dict:
+        if type(structure) is dict:
             query = self.__session.query(cls)
 
             for _row in query.all():
