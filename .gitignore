@@ -7,3 +7,9 @@ file.json
 
 # Python Cache
 __pycache__
+
+# Bash files
+generate-authors.sh
+
+# Files emacs
+*~
