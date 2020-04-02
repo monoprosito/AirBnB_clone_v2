@@ -63,36 +63,36 @@ class Place(BaseModel, Base):
         longitude = 0.0
         amenity_ids = []
 
-    @property
-    def reviews(self):
-        """Get a list of all linked Reviews.
-        """
+        @property
+        def reviews(self):
+            """Get a list of all linked Reviews.
+            """
 
-        review_list = []
+            review_list = []
 
-        for review in models.storage.all(Review).values():
-            if review.place_id == self.id:
-                review_list.append(review)
+            for review in models.storage.all(Review).values():
+                if review.place_id == self.id:
+                    review_list.append(review)
 
-        return review_list
+            return review_list
 
-    @property
-    def amenities(self):
-        """Get and Set linked Amenities.
-        """
+        @property
+        def amenities(self):
+            """Get and Set linked Amenities.
+            """
 
-        amenity_list = []
+            amenity_list = []
 
-        for amenity in models.storage.all(Amenity).values():
-            if amenity.id in self.amenity_ids:
-                amenity_list.append(amenity)
+            for amenity in models.storage.all(Amenity).values():
+                if amenity.id in self.amenity_ids:
+                    amenity_list.append(amenity)
 
-        return amenity_list
+            return amenity_list
 
-    @amenities.setter
-    def amenities(self, value):
-        """Adding an Amenity.id to the amenity_ids
-        """
+        @amenities.setter
+        def amenities(self, value):
+            """Adding an Amenity.id to the amenity_ids
+            """
 
-        if type(value) == Amenity:
-            self.amenity_ids.append(value.id)
+            if type(value) == Amenity:
+                self.amenity_ids.append(value.id)
