@@ -78,7 +78,7 @@ class BaseModel:
         my_dict["updated_at"] = self.updated_at.isoformat()
 
         if my_dict['_sa_instance_state']:
-            del my_dict['_sa_instance_state']
+            my_dict.pop('_sa_instance_state')
 
         return my_dict
 
