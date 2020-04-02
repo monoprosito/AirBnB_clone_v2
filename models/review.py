@@ -2,9 +2,7 @@
 """This is the review class"""
 from models.base_model import BaseModel, Base
 from os import getenv
-from sqlalchemy import Column
-from sqlalchemy import String
-from sqlalchemy import ForeignKey
+from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 
