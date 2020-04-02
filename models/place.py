@@ -2,21 +2,11 @@
 """This is the place class"""
 from models.base_model import BaseModel, Base
 from models.review import Review
-from models.amenity import Amenity
+from models.amenity import Amenity, place_amenity
 from os import getenv
-from sqlalchemy import Column, Table
-from sqlalchemy import String, Integer, Float
-from sqlalchemy import ForeignKey
+from sqlalchemy import Column, String, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
-
-
-association_table = Table("place_amenity", Base.metadata,
-                          Column("place_id", String(60),
-                                 ForeignKey("places.id"),
-                                 primary_key=True, nullable=False),
-                          Column("amenity_id", String(60),
-                                 ForeignKey("amenities.id"),
-                                 primary_key=True, nullable=False))
+import models
 
 
 class Place(BaseModel, Base):
@@ -56,8 +46,9 @@ class Place(BaseModel, Base):
         latitude = Column(Float)
         longitude = Column(Float)
         reviews = relationship("Review", backref="place", cascade="delete")
-        amenities = relationship("Amenity", secondary="place_amenity",
-                                 viewonly=False)
+        amenities = relationship("Amenity", secondary=place_amenity,
+                                 viewonly=False,
+                                 back_populates='place_amenities')
         amenity_ids = []
     else:
         city_id = ''
@@ -79,7 +70,7 @@ class Place(BaseModel, Base):
 
         review_list = []
 
-        for review in list(models.storage.all(Review).values()):
+        for review in models.storage.all(Review).values():
             if review.place_id == self.id:
                 review_list.append(review)
 
@@ -92,7 +83,7 @@ class Place(BaseModel, Base):
 
         amenity_list = []
 
-        for amenity in list(models.storage.all(Amenity).values()):
+        for amenity in models.storage.all(Amenity).values():
             if amenity.id in self.amenity_ids:
                 amenity_list.append(amenity)
 
@@ -100,7 +91,7 @@ class Place(BaseModel, Base):
 
     @amenities.setter
     def amenities(self, value):
-        """...
+        """Adding an Amenity.id to the amenity_ids
         """
 
         if type(value) == Amenity:
