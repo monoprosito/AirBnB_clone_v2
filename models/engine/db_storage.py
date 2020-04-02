@@ -66,7 +66,6 @@ class DBStorage:
         """
 
         self.__session.commit()
-        self.__session.close()
 
     def delete(self, obj=None):
         """Delete obj from the current database session.
