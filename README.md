@@ -23,7 +23,7 @@
 - How to use environment variables
 
 ---
-## Diagramm Class
+## Diagram Class
 This diagram shows the relationship between all the classes created:
 
 ![N|Solid](https://github.com/jdrestre/pictures-holberton-projects/blob/master/AirBnB_clone_v2_MySQL/AirBnb_DB_diagrammclasses.jpg)
