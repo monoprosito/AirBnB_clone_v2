@@ -13,3 +13,6 @@ generate-authors.sh
 
 # Files emacs
 *~
+
+# Releases tarballs
+versions/
