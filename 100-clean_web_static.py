@@ -7,6 +7,7 @@ from os import path
 env.hosts = ['35.229.93.37', '54.196.213.127']
 
 
+@runs_once
 def do_pack():
     """Generates a .tgz archive from the contents
     of the web_static folder of this repository.
@@ -45,25 +46,41 @@ def do_deploy(archive_path):
     return False
 
 
+def gets_out_of_date(number, _type):
+    """Gets a number of content that is out of date
+    """
+
+    if number == 0:
+        number = 1
+
+    if _type == 'local':
+        content = local("ls -td web_static_*", capture=True)
+    elif _type == 'remote':
+        content = run("ls -td web_static_*")
+
+    content_list = content.split()
+    out_of_date = content_list[number:]
+    return out_of_date
+
+
 def do_clean(number=0):
     """Deletes out-of-date .tgz archives of web servers
     """
 
-    del_from = int(number)
+    number = int(number)
 
-    if del_from >= 0:
+    if number >= 0:
         with lcd("versions"):
-            v_files = local("ls -t", capture=True)
-            v_files_list = v_files.split()
+            _files = gets_out_of_date(number, 'local')
 
-            if del_from == 0:
-                del_from = 1
+            for _file in _files:
+                local("rm -f {file}".format(file=_file))
 
-            to_delete = v_files_list[del_from:]
+        with cd("/data/web_static/releases"):
+            _folders = gets_out_of_date(number, 'remote')
 
-            for _file in to_delete:
-                local("rm -f {f}".format(f=_file))
-                run("rm -f /data/web_static/releases/{f}".format(f=_file))
+            for _folder in _folders:
+                run("rm -rf {folder}".format(folder=_folder))
 
 
 def deploy():
