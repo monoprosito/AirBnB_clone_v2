@@ -17,6 +17,18 @@ exec { 'Create Directory Tree':
     require => Package['nginx']
 }
 
+file { '/data':
+    ensure => 'directory',
+    owner  => 'ubuntu',
+    group  => 'ubuntu'
+}
+
+file { '/data/web_static':
+    ensure => 'directory',
+    owner  => 'ubuntu',
+    group  => 'ubuntu'
+}
+
 $head = "  <head>\n  </head>"
 $body = "  <body>\n    Holberton School\n  </body>"
 $index = "<html>\n${head}\n${body}\n</html>\n"
