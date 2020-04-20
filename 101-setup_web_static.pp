@@ -17,18 +17,6 @@ exec { 'Create Directory Tree':
     require => Package['nginx']
 }
 
-file { '/data':
-    ensure => 'directory',
-    owner  => 'ubuntu',
-    group  => 'ubuntu'
-}
-
-file { '/data/web_static':
-    ensure => 'directory',
-    owner  => 'ubuntu',
-    group  => 'ubuntu'
-}
-
 $head = "  <head>\n  </head>"
 $body = "  <body>\n    Holberton School\n  </body>"
 $index = "<html>\n${head}\n${body}\n</html>\n"
@@ -59,6 +47,12 @@ service { 'nginx':
     require => Package['nginx']
 }
 
+# Set permissions for 'ubuntu' user
+exec { 'Set permissions':
+    command => '/bin/chown -R ubuntu:ubuntu /data',
+    require => File['Create Symbolic Link']
+}
+
 # Set a new location for a Nginx VHost 
 $loc_header='location /hbnb_static/ {'
 $loc_content='alias /data/web_static/current/;'
@@ -71,5 +65,5 @@ file_line { 'Set Nginx Location':
     after   => 'server_name \_;',
     line    => $new_location,
     notify  => Service['nginx'],
-    require => File['Create Symbolic Link']
+    require => Exec['Set permissions']
 }
