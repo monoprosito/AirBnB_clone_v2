@@ -1,6 +1,9 @@
 # Temporal File Storage file
 file.json
 
+# PyCharm Workspace
+.idea
+
 # VSCode Workspace
 .vscode
 *.code-workspace
