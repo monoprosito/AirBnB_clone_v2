@@ -122,7 +122,7 @@ if __name__ == '__main__':
         for state in states:
             for city in state.cities:
                 cities.append(city)
-        
+
         for place in places:
             for user in users:
                 if place.user_id == user.id:
