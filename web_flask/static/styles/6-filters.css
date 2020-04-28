@@ -25,7 +25,6 @@ button:hover {
     display: inline-grid;
 }
 .filters h2 {
-    margin-left: 15%;
     margin-top: 0;
     margin-bottom: 0;
     font-weight: 600;
@@ -73,6 +72,11 @@ button:hover {
 .popover ul {
     list-style-type: none;
 }
+
+.popover ul li {
+    margin-left: -15px;
+}
+
 .amenities:hover .popover,
 .locations:hover .popover {
     visibility: visible;
